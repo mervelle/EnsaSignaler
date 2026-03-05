@@ -1,0 +1,18 @@
+# --- Backend ---
+# On ne pousse jamais les bibliothèques installées (trop lourd)
+backend/node_modules/
+
+# On ne pousse JAMAIS tes secrets (mots de passe DB)
+backend/.env
+
+# --- Base de données ---
+# Si Docker crée un dossier local pour stocker les données, on l'ignore
+postgres_data/
+
+# --- Système & IDE ---
+# Fichiers inutiles de Windows ou Mac
+.DS_Store
+Thumbs.db
+
+# Fichiers de configuration de VS Code
+.vscode/
