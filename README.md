@@ -1,4 +1,4 @@
-# Campus Eco Responsable
+# EnsaSignaler
 
 Application pour signaler des problèmes écologiques sur le campus.
 
