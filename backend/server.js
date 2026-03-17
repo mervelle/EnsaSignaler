@@ -32,3 +32,19 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log(`🚀 Serveur démarré sur http://localhost:3000`);
 });
+
+app.post("/signalements", async (req, res) => {
+  const { title, description, location } = req.body;
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO signalements(title, description, location) VALUES($1,$2,$3) RETURNING *",
+      [title, description, location]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});

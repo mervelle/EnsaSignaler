@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signaler un problème - EnsaSignaler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="mediaqueries.css">
+</head>
+<body>
+    <header class="nav-bar">
+      <div class="nav-container">
+        <div class="logo">
+            <span class="logo-ensa">Ensa</span>
+            <span class="logo-signaler">Signaler</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Accueil</a></li>
+                <li><a href="about.html">A propos</a></li>
+                <li><a href="form.html" class="cta-btn">Signaler</a></li>
+            </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="form-page">
+        <div class="container">
+            <div class="form-container">
+                <h3>Signaler un problème environnemental</h3>
+                <form id="reportForm" class="report-form">
+                    <div class="form-group">
+                        <label for="user">Utilisateur</label>
+                        <select id="user" name="user">
+                        <option value="1">Ahmed</option>
+                        <option value="2">Sara</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemType">Type de problème</label>
+                        <select id="problemType" name="problemType" required>
+                            <option value="">Sélectionnez un type</option>
+                            <option value="déchets">Déchets sauvages</option>
+                            <option value="eau">Problème d'eau</option>
+                            <option value="air">Pollution de l'air</option>
+                            <option value="bruit">Bruit excessif</option>
+                            <option value="végétation">Problème de végétation</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Emplacement</label>
+                        <input type="text" id="location" name="location" placeholder="Ex: Bibliothèque, Parking, Amphithéâtre A..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Décrivez le problème en détail..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo">Photo (optionnel)</label>
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact">Email de contact (optionnel)</label>
+                        <input type="email" id="contact" name="contact" placeholder="votre.email@ensa.ac.ma">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Envoyer le signalement</button>
+                </form>
+            </div>
+
+            <div class="status-section">
+                <h3>Vos signalements</h3>
+                <div id="reportsList" class="reports-list">
+                    <!-- Les signalements seront affichés ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span id="notificationMessage"></span>
+            <button id="closeNotification" class="close-btn">&times;</button>
+        </div>
+    </div>
+
+    <script src="form.js"></script>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\PC\Documents\EnsaSignaler\frontend\form.html
