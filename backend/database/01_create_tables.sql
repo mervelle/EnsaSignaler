@@ -22,3 +22,4 @@ CREATE TABLE suggestions (
     signalement_id INT,
     FOREIGN KEY (signalement_id) REFERENCES signalements(id)
 );
+
