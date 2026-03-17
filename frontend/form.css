@@ -562,3 +562,32 @@ body {
         font-size: 0.85rem;
     }
 }
+
+/*filter styles*/
+.filter-container{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.filter-btn{
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid #e5e7eb;
+    background:white;
+    cursor:pointer;
+    font-size:14px;
+    transition:all 0.2s ease;
+}
+
+.filter-btn:hover{
+    background:#f0fdf4;
+    border-color:#22c55e;
+}
+
+.filter-btn.active{
+    background:#22c55e;
+    color:white;
+    border-color:#22c55e;
+}

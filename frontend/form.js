@@ -9,6 +9,9 @@ class EnsaSignalerForm {
     init() {
         this.bindEvents();
         this.loadReportsDisplay();
+        this.loadReportsFromAPI();
+        this.bindFilterButtons();
+        
     }
 
     bindEvents() {
@@ -31,6 +34,8 @@ class EnsaSignalerForm {
         if (backBtn) {
             backBtn.addEventListener('click', () => this.navigateBack());
         }
+
+        
     }
 
     navigateBack() {
@@ -111,6 +116,17 @@ class EnsaSignalerForm {
         container.innerHTML = this.reports.map(report => this.createReportCard(report)).join('');
     }
 
+        loadReportsFromAPI() {
+        fetch("http://localhost:3000/signalements")
+            .then(res => res.json())
+            .then(data => {
+            console.log("DATA FROM API:", data);
+            this.reports = data;
+            this.loadReportsDisplay();
+        })
+        .catch(err => console.error(err));
+         }
+
     createReportCard(report) {
         const statusLabels = {
             pending: 'En attente',
@@ -144,8 +160,8 @@ class EnsaSignalerForm {
         return `
             <div class="report-card">
                 <div class="report-header">
-                    <span class="report-type">${typeLabels[report.type] || report.type}</span>
-                    <span class="report-status ${statusClasses[report.status]}">${statusLabels[report.status]}</span>
+                    <span class="report-type">${typeLabels[report.title] || report.title}</span>
+                    <span class="report-status ${statusClasses[report.status]}">${report.status || "nouveau"}</span>
                 </div>
                 <div class="report-location">${report.location}</div>
                 <div class="report-description">${report.description}</div>
@@ -173,9 +189,38 @@ class EnsaSignalerForm {
             notification.classList.remove('show');
         }
     }
+
+    bindFilterButtons() {
+    const buttons = document.querySelectorAll(".filter-btn");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            // remove active
+            buttons.forEach(b => b.classList.remove("active"));
+
+            // add active
+            btn.classList.add("active");
+
+            const type = btn.dataset.type;
+
+            if (!type) {
+                this.loadReportsDisplay();
+                return;
+            }
+
+            const filtered = this.reports.filter(r => r.title === type);
+
+            const container = document.getElementById("reportsList");
+            container.innerHTML = filtered.map(r => this.createReportCard(r)).join('');
+        });
+    });
+}
+    
 }
 
 // Initialize form page
 document.addEventListener('DOMContentLoaded', () => {
     new EnsaSignalerForm();
 });
+
