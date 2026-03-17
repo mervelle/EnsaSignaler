@@ -45,7 +45,8 @@ class EnsaSignalerForm {
     const report = {
         title: formData.get('problemType'),
         description: formData.get('description'),
-        location: formData.get('location')
+        location: formData.get('location'),
+        user_id: parseInt(formData.get('user'))
     };
 
     fetch("http://localhost:3000/signalements", {
