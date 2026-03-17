@@ -65,7 +65,7 @@ class EnsaSignalerForm {
     .then(data => {
     console.log("Signalement enregistré:", data);
     this.showNotification('Signalement envoyé avec succès !');
-    this.saveReport(report);
+    this.loadReportsFromAPI();
     })
     .catch(err => {
         console.error("Erreur:", err);
