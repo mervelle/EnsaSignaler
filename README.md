@@ -5,8 +5,8 @@ Plateforme web permettant de signaler des problèmes environnementaux au sein de
 ---
 
 ## 📸 Aperçu
+<img width="1295" height="615" alt="screenshot" src="https://github.com/user-attachments/assets/a961b0d3-0e21-405f-8428-d445f92c84be" />
 
-(./frontend/assets/screenshot.png)
 
 
 
