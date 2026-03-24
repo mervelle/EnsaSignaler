@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - EnsaSignaler</title>
     <link rel="stylesheet" href="form.css">
-    <link rel="stylesheet" href="style.css"></head>
-
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-
+    <style>
+        /* Styles pour la notification toast */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        #notification.show { display: block; animation: fadeIn 0.3s; }
+    </style>
+</head>
 <body>
 
 <header class="nav-bar">
@@ -18,32 +32,29 @@
         <span class="logo-ensa">Ensa</span>
         <span class="logo-signaler">Signaler</span>
     </div>
-
     <nav>
         <ul class="nav-links">
             <li><a href="home.html">Accueil</a></li>
             <li><a href="about.html">À propos</a></li>
+            <li><a href="admin.html" class="cta-btn">Admin</a></li>
         </ul>
     </nav>
   </div>
 </header>
 
+<div id="notification">
+    <span id="notificationMessage"></span>
+</div>
+
 <div class="form-page">
     <div class="container">
-
         <div class="status-section">
             <h3>Gestion des signalements</h3>
-
-            <div id="reportsList" class="reports-list">
-                <!-- cartes -->
-            </div>
-
+            <div id="reportsList"></div> 
         </div>
-
     </div>
 </div>
 
 <script src="admin.js"></script>
-
 </body>
 </html>

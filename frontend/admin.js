@@ -1,6 +1,7 @@
 class AdminPanel {
     constructor() {
         this.reports = [];
+        this.selectedReport = null;
         this.init();
     }
 
@@ -12,7 +13,6 @@ class AdminPanel {
         fetch("http://localhost:3000/signalements")
             .then(res => res.json())
             .then(data => {
-                console.log("DATA:", data);
                 this.reports = data;
                 this.render();
             })
@@ -20,93 +20,78 @@ class AdminPanel {
     }
 
     render() {
-        const container = document.getElementById("reportsList");
-
-        // 🔥 GROUP BY USER
-        const grouped = {};
-
-        this.reports.forEach(r => {
-            if (!grouped[r.name]) {
-                grouped[r.name] = [];
-            }
-            grouped[r.name].push(r);
-        });
-
-        container.innerHTML = Object.keys(grouped).map(user => `
-            <div class="user-section">
-                <h3 class="user-title">${user}</h3>
-
-                ${grouped[user].map(r => this.createCard(r)).join('')}
+        const listContainer = document.getElementById("reportsList");
+        
+        // Structure en deux colonnes si ce n'est pas déjà fait dans le HTML
+        listContainer.innerHTML = `
+            <div class="admin-dashboard">
+                <div class="admin-sidebar">
+                    <h4>Liste des incidents</h4>
+                    <table class="admin-table">
+                        <thead>
+                            <tr><th>Utilisateur</th><th>Type</th></tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+                <div class="admin-details" id="detailsPane">
+                    <div class="empty-state">Sélectionnez un incident pour voir les détails</div>
+                </div>
             </div>
-        `).join('');
+        `;
+
+        const tbody = document.getElementById("tableBody");
+        this.reports.forEach(r => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${r.name}</td><td>${r.title}</td>`;
+            tr.onclick = () => this.showDetails(r);
+            tbody.appendChild(tr);
+        });
     }
 
-    createCard(report) {
-
-        const statusLabels = {
-            nouveau: "Ouvert",
-            "en cours": "En cours",
-            resolu: "Résolu"
-        };
-
-        const statusClasses = {
-            nouveau: "status-open",
-            "en cours": "status-progress",
-            resolu: "status-resolved"
-        };
-
-        return `
-        <div class="report-card">
-
-            <div class="report-header">
-                <span class="report-type">${report.title}</span>
-
-                <span class="report-status ${statusClasses[report.status]}">
-                    ${statusLabels[report.status]}
-                </span>
+    showDetails(report) {
+        this.selectedReport = report;
+        const pane = document.getElementById("detailsPane");
+        
+        const statusLabels = { nouveau: "Ouvert", "en cours": "En cours", resolu: "Résolu" };
+        
+        pane.innerHTML = `
+            <div class="report-card detail-view">
+                <h3>Détails du Signalement #${report.id}</h3>
+                <hr>
+                <p><strong>Utilisateur:</strong> ${report.name}</p>
+                <p><strong>Type:</strong> ${report.title}</p>
+                <p><strong>Lieu:</strong> ${report.location}</p>
+                <p><strong>Description:</strong> ${report.description}</p>
+                <p><strong>Statut Actuel:</strong> <span class="report-status status-${report.status.replace(' ', '-')}">${statusLabels[report.status]}</span></p>
+                
+                <div class="report-actions">
+                    <button class="btn-orange" onclick="updateStatus(${report.id}, 'en cours')">En cours</button>
+                    <button class="btn-green" onclick="updateStatus(${report.id}, 'resolu')">Résolu</button>
+                </div>
             </div>
-
-            <div class="report-user">${report.name}</div>
-
-            <div class="report-location">${report.location}</div>
-
-            <div class="report-description">${report.description}</div>
-
-            <div class="report-actions">
-
-                <button onclick="changeStatus(${report.id}, 'en cours')">
-                    En cours
-                </button>
-
-                <button onclick="changeStatus(${report.id}, 'resolu')">
-                    Résolu
-                </button>
-
-            </div>
-
-        </div>
         `;
     }
 }
 
-new AdminPanel();
-
-
-// ✅ MAKE FUNCTION GLOBAL (IMPORTANT FIX)
-window.changeStatus = function(id, status) {
+window.updateStatus = function(id, status) {
     fetch(`http://localhost:3000/signalements/${id}`, {
         method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status })
     })
     .then(res => res.json())
-    .then(data => {
-        console.log("UPDATED:", data);
-
-        // 🔥 Instead of reload → better UX
-        const panel = new AdminPanel(); // reload data cleanly
-    })
-    .catch(err => console.error(err));
+    .then(() => {
+        showGlobalNotification("Mis à jour avec succès !");
+        new AdminPanel(); // Refresh
+    });
 }
+
+function showGlobalNotification(msg) {
+    const notify = document.getElementById("notification");
+    document.getElementById("notificationMessage").innerText = msg;
+    notify.classList.add("show");
+    setTimeout(() => notify.classList.remove("show"), 3000);
+}
+
+new AdminPanel();

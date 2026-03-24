@@ -3,11 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Incidents - EnsaSignaler</title>
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <style>
+        /* Styles pour les onglets et filtres */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap:15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #22c55e;
+        }
+        .filters-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+        }
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            min-width: 150px;
+        }
+        .filter-select:focus {
+            border-color: #22c55e;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,7 +63,7 @@
         <ul class="nav-links">
             <li><a href="home.html">Accueil</a></li>
             <li><a href="about.html">À propos</a></li>
-            <li><a href="incidents.html">Mes signalements</a></li>
+            <li><a href="incidents.html">Incidents</a></li>
             <li><a href="form.html" class="cta-btn">Signaler</a></li>
         </ul>
     </nav>
@@ -32,22 +72,45 @@
 
 <div class="form-page">
     <div class="container">
+        
+        <div class="tab-container">
+            <button class="tab-btn active" data-view="all">Tous les signalements</button>
+            <button class="tab-btn" data-view="mine">Mes signalements</button>
+        </div>
+
         <div class="status-section">
-                <h3>Vos signalements</h3>
-                <div class="filter-container">
-                   <button class="filter-btn active" data-type="">Tous</button>
-                   <button class="filter-btn" data-type="déchets">Déchets</button>
-                   <button class="filter-btn" data-type="eau"> Eau</button>
-                   <button class="filter-btn" data-type="air">Air</button>
-                   <button class="filter-btn" data-type="bruit">Bruit</button>
-                   <button class="filter-btn" data-type="végétation">Végétation</button>
+            <h3>Filtres de recherche</h3>
+            
+            <div class="filters-group">
+                <div>
+                    <label style="display:block; font-size: 12px; margin-bottom: 5px; color: #666;">Type de problème</label>
+                    <select id="filterType" class="filter-select">
+                        <option value="">Tous les types</option>
+                        <option value="déchets">Déchets</option>
+                        <option value="eau">Eau</option>
+                        <option value="air">Air</option>
+                        <option value="bruit">Bruit</option>
+                        <option value="végétation">Végétation</option>
+                        <option value="lumière">Lumière</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display:block; font-size: 12px; margin-bottom: 5px; color: #666;">Statut actuel</label>
+                    <select id="filterStatus" class="filter-select">
+                        <option value="">Tous les statuts</option>
+                        <option value="nouveau">Nouveau (Ouvert)</option>
+                        <option value="en cours">En cours</option>
+                        <option value="resolu">Résolu</option>
+                    </select>
                 </div>
             </div>
+        </div>
+
         <div class="status-section">
-            <h3>Tous les signalements</h3>
-
-            <div id="reportsList" class="reports-list"></div>
-
+            <h3 id="listTitle">Tous les incidents</h3>
+            <div id="reportsList" class="reports-list">
+                </div>
         </div>
 
     </div>

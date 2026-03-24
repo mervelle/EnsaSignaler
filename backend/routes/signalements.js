@@ -2,42 +2,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-// POST /signalements
-router.post('/', async (req, res) => {
-    console.log("REQUETE REÇUE", req.body);
-    console.log("POST /signalements HIT");
-    console.log(req.body);
-
-    
-    const { title, description, location, user_id } = req.body;
-    // validation simple
-    if (!title || !description || !location || !user_id) {
-    return res.status(400).json({
-        error: "Tous les champs sont obligatoires"
-    });
-    }
-
-    try {
-        const result = await pool.query(
-        "INSERT INTO signalements(title, description, location, user_id) VALUES($1,$2,$3,$4) RETURNING *",
-        [title, description, location, user_id]
-        );
-
-        res.status(201).json(result.rows[0]);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erreur serveur" });
-    }
-});
-
-module.exports = router;
-
-//router get
-// GET /signalements
+// GET /signalements (Récupérer tout)
 router.get('/', async (req, res) => {
-    console.log("GET /signalements HIT");
-
     try {
         const result = await pool.query(`
             SELECT s.*, u.name 
@@ -45,11 +11,43 @@ router.get('/', async (req, res) => {
             JOIN users u ON s.user_id = u.id
             ORDER BY s.created_at DESC
         `);
-
         res.json(result.rows);
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
+
+// POST /signalements (Créer)
+router.post('/', async (req, res) => {
+    const { title, description, location, user_id } = req.body;
+    try {
+        const result = await pool.query(
+            "INSERT INTO signalements(title, description, location, user_id, status) VALUES($1,$2,$3,$4,'nouveau') RETURNING *",
+            [title, description, location, user_id]
+        );
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+// PATCH /signalements/:id (Mettre à jour le statut - CRUCIAL)
+router.patch('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+        const result = await pool.query(
+            "UPDATE signalements SET status = $1 WHERE id = $2 RETURNING *",
+            [status, id]
+        );
+        if (result.rows.length === 0) return res.status(404).json({ error: "Non trouvé" });
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur lors de la mise à jour" });
+    }
+});
+
+module.exports = router;

@@ -20,7 +20,7 @@ body {
 }
 
 .container {
-    max-width:700px;
+    min-width:700px;
     margin:auto;
     padding: 0 20px;
     position: relative;
@@ -622,4 +622,90 @@ body {
 
 .report-actions button:hover{
     transform:translateY(-2px);
+}
+
+/* Nouveaux styles Dashboard Admin */
+.admin-dashboard {
+    display: flex;
+    gap: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.admin-sidebar {
+    flex: 1;
+    border-right: 1px solid #eee;
+    padding-right: 20px;
+}
+
+.admin-details {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.admin-table th {
+    color: #6b7280;
+    font-size: 12px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+
+.admin-table tr {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.admin-table tr:hover {
+    background: #f0fdf4;
+}
+
+.admin-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 14px;
+}
+
+/* Boutons de couleurs */
+.btn-orange { background: #f59e0b; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+.btn-green { background: #22c55e; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+
+/* Styles Onglets */
+.tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab-btn { padding: 10px 20px; border: none; background: #eee; border-radius: 8px; cursor: pointer; }
+.tab-btn.active { background: #22c55e; color: white; }
+
+/* Filtres select */
+.filters-row { display: flex; gap: 15px; margin-bottom: 20px; }
+.filters-row select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; }
+
+
+.toast-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #22c55e;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1000;
+    animation: fadeInDown 0.5s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
