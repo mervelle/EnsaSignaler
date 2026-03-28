@@ -10,11 +10,14 @@ Plateforme web permettant de signaler des problèmes environnementaux au sein de
 
 
 
-## 🚀 Fonctionnalités (Sprint 1)
+## 🚀 Fonctionnalités
 
 ### ✅ Frontend
 - Page d’accueil moderne
-- Formulaire de signalement
+- page admin pour modifier les status des signalements
+- Formulaire de signalement (page de l'etudiant)
+- page de signalements pour que l'etudiant consulte tous ses signalements
+- Authentification simuler avec LocalStorage
 
 ### ✅ Backend
 - API REST avec Node.js (Express)
