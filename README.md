@@ -18,10 +18,10 @@ Plateforme web permettant de signaler des problèmes environnementaux au sein de
 - Formulaire de signalement (page de l'etudiant)
 - page de signalements pour que l'etudiant consulte tous ses signalements
 - Authentification simuler avec LocalStorage
+- Suggestions avec une logique simple
 
 ### ✅ Backend
 - API REST avec Node.js (Express)
-- Route POST `/signalements`
 - Validation des données
 
 ### ✅ Base de données
@@ -29,7 +29,6 @@ Plateforme web permettant de signaler des problèmes environnementaux au sein de
 - Tables :
   - `users`
   - `signalements`
-  - `suggestions`
 
 ### ✅ Intégration
 - Connexion Frontend → Backend → Database
