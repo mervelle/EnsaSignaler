@@ -1,17 +1,8 @@
 class AdminPanel {
     constructor() {
-        this.checkAdminAuth();
         this.reports = [];
         this.selectedReport = null;
         this.init();
-    }
-
-    checkAdminAuth() {
-        const role = localStorage.getItem('user_role');
-        if (role !== 'admin') {
-            alert("Accès refusé. Réservé aux administrateurs.");
-            window.location.href = 'login.html';
-        }
     }
 
     init() {

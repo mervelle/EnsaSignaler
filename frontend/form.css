@@ -709,3 +709,9 @@ body {
     from { opacity: 0; transform: translateX(20px); }
     to { opacity: 1; transform: translateX(0); }
 }
+
+#apogee {
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: #258643;
+}

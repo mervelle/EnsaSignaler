@@ -2,6 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
+    apogee_code VARCHAR(20) UNIQUE NOT NULL, 
     role VARCHAR(50) NOT NULL
 );
 
@@ -10,6 +11,7 @@ CREATE TABLE signalements (
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     location VARCHAR(200),
+    apogee VARCHAR(20) NOT NULL,
     status VARCHAR(50) DEFAULT 'nouveau',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT,

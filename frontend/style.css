@@ -265,9 +265,7 @@ footer p{
 .tab-btn.active { background: #22c55e; color: white; }
 
 .status-badge {
-
     padding: 10px !important;
     border-radius: 12px;
     font-size: 0.75rem;    color: white;
-
 }

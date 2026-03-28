@@ -30,38 +30,12 @@
     <ul class="nav-links">
         <li><a href="home.html">Accueil</a></li>
         <li><a href="about.html">À propos</a></li>
-        <li><a href="#" onclick="handleNav('student')">Signaler</a></li>
-        <li><a href="#" onclick="handleNav('admin')" class="cta-btn" id="adminBtn">Admin</a></li>
+        <li><a href="form.html">Signaler</a></li>
+        <li><a href="admin.html" class="cta-btn" id="adminBtn">Admin</a></li>
     </ul>
 </nav>
 
-<script>
-function handleNav(targetRole) {
-    const currentRole = localStorage.getItem('user_role');
 
-    if (!currentRole) {
-        // Si personne n'est connecté, on force le passage par login.html
-        window.location.href = 'login.html';
-    } else if (currentRole === targetRole) {
-        // Si le rôle correspond, on laisse passer
-        window.location.href = (targetRole === 'admin') ? 'admin.html' : 'form.html';
-    } else {
-        // Si un étudiant essaie d'aller en admin (ou vice versa)
-        alert("Vous devez vous reconnecter avec le bon compte pour accéder à cette section.");
-        window.location.href = 'login.html';
-    }
-}
-
-function logout() {
-    localStorage.clear();
-    window.location.href = 'login.html';
-}
-
-// Petit script pour afficher/cacher le bouton déconnexion
-if (localStorage.getItem('user_role')) {
-    document.getElementById('logoutLi').style.display = 'block';
-}
-</script>
 
         </div>
 
