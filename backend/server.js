@@ -93,3 +93,25 @@ app.listen(PORT, () => {
     console.log(`🔗 Formulaire : http://localhost:${PORT}/form.html`);
     console.log(`📊 API Suggestions : http://localhost:${PORT}/suggestions/1\n`);
 });
+
+// Route pour mettre à jour le statut d'un signalement
+// Remplace ta dernière route par celle-ci :
+app.patch('/signalements/:id', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+        const result = await pool.query(
+            'UPDATE signalements SET status = $1 WHERE id = $2', 
+            [status, id]
+        );
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Signalement non trouvé" });
+        }
+        
+        res.json({ message: "Statut mis à jour avec succès" });
+    } catch (err) {
+        console.error("Erreur UPDATE:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});

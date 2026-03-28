@@ -269,3 +269,60 @@ footer p{
     border-radius: 12px;
     font-size: 0.75rem;    color: white;
 }
+
+/* Layout Split-View */
+.admin-dashboard {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Liste fixe à gauche, détails flexibles */
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 500px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.admin-sidebar {
+    border-right: 1px solid #e5e7eb;
+    padding-right: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.admin-details {
+    padding-left: 10px;
+}
+
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #9ca3af;
+    font-style: italic;
+    border: 2px dashed #e5e7eb;
+    border-radius: 12px;
+}
+
+/* Style de la table dans la sidebar */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table tr {
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.admin-table tr:hover {
+    background: #f0fdf4; /* Vert très clair au survol */
+}
+
+.admin-table td {
+    padding: 12px 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #f3f4f6;
+}
