@@ -1,8 +1,17 @@
 class AdminPanel {
     constructor() {
+        this.checkAdminAuth();
         this.reports = [];
         this.selectedReport = null;
         this.init();
+    }
+
+    checkAdminAuth() {
+        const role = localStorage.getItem('user_role');
+        if (role !== 'admin') {
+            alert("Accès refusé. Réservé aux administrateurs.");
+            window.location.href = 'login.html';
+        }
     }
 
     init() {
@@ -16,13 +25,14 @@ class AdminPanel {
                 this.reports = data;
                 this.render();
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error("Erreur chargement:", err));
     }
 
     render() {
         const listContainer = document.getElementById("reportsList");
-        
-        // Structure en deux colonnes si ce n'est pas déjà fait dans le HTML
+        if (!listContainer) return;
+
+        // On injecte la structure Split-View si elle n'existe pas
         listContainer.innerHTML = `
             <div class="admin-dashboard">
                 <div class="admin-sidebar">
@@ -43,7 +53,7 @@ class AdminPanel {
         const tbody = document.getElementById("tableBody");
         this.reports.forEach(r => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${r.name}</td><td>${r.title}</td>`;
+            tr.innerHTML = `<td>${r.name || 'Étudiant'}</td><td>${r.title}</td>`;
             tr.onclick = () => this.showDetails(r);
             tbody.appendChild(tr);
         });
@@ -52,28 +62,28 @@ class AdminPanel {
     showDetails(report) {
         this.selectedReport = report;
         const pane = document.getElementById("detailsPane");
-        
         const statusLabels = { nouveau: "Ouvert", "en cours": "En cours", resolu: "Résolu" };
         
         pane.innerHTML = `
             <div class="report-card detail-view">
                 <h3>Détails du Signalement #${report.id}</h3>
                 <hr>
-                <p><strong>Utilisateur:</strong> ${report.name}</p>
+                <p><strong>Utilisateur:</strong> ${report.name || 'Étudiant'}</p>
                 <p><strong>Type:</strong> ${report.title}</p>
                 <p><strong>Lieu:</strong> ${report.location}</p>
                 <p><strong>Description:</strong> ${report.description}</p>
-                <p><strong>Statut Actuel:</strong> <span class="report-status status-${report.status.replace(' ', '-')}">${statusLabels[report.status]}</span></p>
+                <p><strong>Statut Actuel:</strong> <span class="status-badge">${statusLabels[report.status]}</span></p>
                 
-                <div class="report-actions">
-                    <button class="btn-orange" onclick="updateStatus(${report.id}, 'en cours')">En cours</button>
-                    <button class="btn-green" onclick="updateStatus(${report.id}, 'resolu')">Résolu</button>
+                <div class="report-actions" style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn-orange" onclick="window.updateStatus(${report.id}, 'en cours')">Mettre En cours</button>
+                    <button class="btn-green" onclick="window.updateStatus(${report.id}, 'resolu')">Marquer Résolu</button>
                 </div>
             </div>
         `;
     }
 }
 
+// Fonction globale pour le bouton de changement de statut
 window.updateStatus = function(id, status) {
     fetch(`http://localhost:3000/signalements/${id}`, {
         method: "PATCH",
@@ -82,16 +92,10 @@ window.updateStatus = function(id, status) {
     })
     .then(res => res.json())
     .then(() => {
-        showGlobalNotification("Mis à jour avec succès !");
-        new AdminPanel(); // Refresh
-    });
-}
-
-function showGlobalNotification(msg) {
-    const notify = document.getElementById("notification");
-    document.getElementById("notificationMessage").innerText = msg;
-    notify.classList.add("show");
-    setTimeout(() => notify.classList.remove("show"), 3000);
-}
+        alert("Statut mis à jour ! ✅");
+        location.reload(); // Recharge la page pour actualiser la liste
+    })
+    .catch(err => console.error("Erreur mise à jour:", err));
+};
 
 new AdminPanel();

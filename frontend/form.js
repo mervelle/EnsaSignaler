@@ -1,63 +1,36 @@
-class EnsaSignalerForm {
-    constructor() {
-        this.init();
+document.addEventListener('DOMContentLoaded', () => {
+    const reportForm = document.getElementById('reportForm');
+    const userId = localStorage.getItem('user_id');
+
+    // Sécurité : si pas de rôle, on redirige
+    if (!localStorage.getItem('user_role')) {
+        window.location.href = 'login.html';
+        return;
     }
 
-    init() {
-        this.bindEvents();
-    }
-
-    bindEvents() {
-        const form = document.getElementById('reportForm');
-        if (form) {
-            form.addEventListener('submit', (e) => this.handleFormSubmit(e));
-        }
-    }
-
-    handleFormSubmit(e) {
+    reportForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
-
-        const report = {
-            title: formData.get('problemType'),
-            description: formData.get('description'),
-            location: formData.get('location'),
-            user_id: formData.get('user')
+        const formData = {
+            title: document.getElementById('problemType').value,
+            location: document.getElementById('location').value,
+            description: document.getElementById('description').value,
+            user_id: userId // Envoie l'ID 1 (Étudiant) par défaut
         };
 
-        fetch("http://localhost:3000/signalements", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(report)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Signalement enregistré:", data);
-            this.showNotification("Signalement envoyé !");
-        })
-        .catch(err => console.error(err));
+        try {
+            const response = await fetch("http://localhost:3000/signalements", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
 
-        e.target.reset();
-    }
-
-    showNotification(message) {
-        const notification = document.getElementById('notification');
-        const messageEl = document.getElementById('notificationMessage');
-
-        if (notification && messageEl) {
-            messageEl.textContent = message;
-            notification.classList.add('show');
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            if (response.ok) {
+                alert("Signalement envoyé !");
+                window.location.href = 'incidents.html';
+            }
+        } catch (error) {
+            console.error("Erreur:", error);
         }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    new EnsaSignalerForm();
+    });
 });

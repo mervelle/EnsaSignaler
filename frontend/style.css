@@ -249,6 +249,8 @@ footer p{
 .report-user {
     font-size: 0.9rem;
     color: #6b7280;
+
+
     margin-bottom: 8px;
 }
 /* Layout Admin Split-View */
@@ -261,3 +263,11 @@ footer p{
 .admin-table td { padding: 12px; border-bottom: 1px solid #eee; }
 
 .tab-btn.active { background: #22c55e; color: white; }
+
+.status-badge {
+
+    padding: 10px !important;
+    border-radius: 12px;
+    font-size: 0.75rem;    color: white;
+
+}
