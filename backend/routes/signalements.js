@@ -20,6 +20,17 @@ router.get('/', async (req, res) => {
 
 // POST /signalements (Créer)
 // POST /signalements (Créer avec validation Apogée)
+// GET /signalements
+router.get('/', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM signalements ORDER BY created_at DESC');
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Erreur GET /signalements :", error);
+        res.status(500).json({ error: "Erreur serveur lors de la récupération des signalements" });
+    }
+});
+
 router.post('/', async (req, res) => {
     const { title, description, location, user_id, apogee } = req.body;
 
