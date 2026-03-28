@@ -5,7 +5,7 @@ class IncidentsPage {
         this.filterType = "";
         this.filterStatus = "";
         this.viewMode = "all"; 
-        this.currentUserId = localStorage.getItem('user_id'); // ID récupéré du Login
+        this.currentUserId = localStorage.getItem('user_id'); 
         this.init();
     }
 
@@ -30,8 +30,21 @@ class IncidentsPage {
             });
     }
 
+    // --- TA FONCTION LOCALE (Plus besoin de fetch ici) ---
+    generateEcoSuggestion(problemType) {
+        const type = problemType ? problemType.toLowerCase() : "";
+        switch(type) {
+            case "déchets": return "Mettre en place des poubelles de tri à proximité.";
+            case "eau": return "Vérifier et réparer les fuites pour économiser l'eau.";
+            case "air": return "Planter plus d'arbres ou installer des purificateurs.";
+            case "bruit": return "Installer des panneaux acoustiques ou limiter les heures bruyantes.";
+            case "végétation": return "Entretenir les espaces verts régulièrement.";
+            case "lumière": return "Installer des capteurs de mouvement pour éteindre les lumières inutiles.";
+            default: return "Analyser et proposer une action éco-responsable adaptée.";
+        }
+    }
+
     bindEvents() {
-        // Filtres Select
         document.getElementById("filterType").addEventListener("change", (e) => {
             this.filterType = e.target.value;
             this.render();
@@ -41,7 +54,6 @@ class IncidentsPage {
             this.render();
         });
         
-        // Onglets (Tous vs Mes Signalements)
         document.querySelectorAll(".tab-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -56,34 +68,51 @@ class IncidentsPage {
         const container = document.getElementById("reportsList");
         let filtered = this.reports;
 
-        // 1. Filtrer par utilisateur si mode "mine"
         if (this.viewMode === "mine") {
             filtered = filtered.filter(r => r.user_id == this.currentUserId);
         }
 
-        // 2. Filtres Type + Statut
         if (this.filterType) filtered = filtered.filter(r => r.title === this.filterType);
         if (this.filterStatus) filtered = filtered.filter(r => r.status === this.filterStatus);
 
-        container.innerHTML = filtered.map(r => this.generateCard(r)).join('');
+        container.innerHTML = "";
+
+        if (filtered.length === 0) {
+            container.innerHTML = "<p style='text-align:center;'>Aucun incident trouvé.</p>";
+            return;
+        }
+
+        // Affichage immédiat car on ne fait plus de await fetchSuggestion
+        filtered.forEach(report => {
+            const suggestion = this.generateEcoSuggestion(report.title);
+            container.innerHTML += this.generateCard(report, suggestion);
+        });
     }
 
-    generateCard(report) {
+    generateCard(report, suggestionText) {
         const statusColors = { nouveau: "#3b82f6", "en cours": "#f59e0b", resolu: "#22c55e" };
         const isMine = report.user_id == this.currentUserId;
 
         return `
-            <div class="report-card" style="${isMine ? 'border-left: 4px solid #22c55e' : ''}">
-                <div class="report-header">
-                    <span class="report-type">${report.title}</span>
-                    <span class="status-badge" style="background:${statusColors[report.status]}; color:white;">
+            <div class="report-card" style="${isMine ? 'border-left: 5px solid #22c55e' : ''}; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;">
+                <div class="report-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="report-type" style="font-weight:bold; text-transform:capitalize; color: #166534;">${report.title}</span>
+                    <span class="status-badge" style="background:${statusColors[report.status] || '#888'}; color:white; padding: 4px 10px; border-radius: 6px; font-size:11px; font-weight:bold;">
                         ${report.status.toUpperCase()}
                     </span>
                 </div>
-                <div class="report-location">📍 ${report.location}</div>
-                <div class="report-description">${report.description}</div>
-                <div class="report-footer" style="margin-top:10px; font-size:12px; color:#888;">
-                    ${isMine ? '<strong>Votre signalement</strong>' : 'Par: ' + (report.name || 'Étudiant')}
+                <div class="report-location" style="font-size:13px; color:#666; margin: 8px 0;">📍 ${report.location}</div>
+                <div class="report-description" style="margin: 10px 0; font-size:14px; color: #444;">${report.description}</div>
+                
+                <div class="eco-suggestion" style="background: #f0fdf4; border: 1px dashed #22c55e; padding: 12px; border-radius: 8px; margin: 15px 0;">
+                    <p style="margin:0; font-size:13px; color:#166534; line-height: 1.4;">
+                        🌱 <strong>Suggestion Éco :</strong> ${suggestionText}
+                    </p>
+                </div>
+
+                <div class="report-footer" style="margin-top:10px; font-size:11px; color:#999; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between;">
+                    <span>${isMine ? '<strong>Votre signalement</strong>' : 'Par: ' + (report.name || 'Étudiant')}</span>
+                    <span>${new Date(report.created_at).toLocaleDateString()}</span>
                 </div>
             </div>
         `;
