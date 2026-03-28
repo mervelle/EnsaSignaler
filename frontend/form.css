@@ -635,6 +635,7 @@ body {
 }
 
 .admin-sidebar {
+    background: #b9e2c5 !important;
     flex: 1;
     border-right: 1px solid #eee;
     padding-right: 20px;
